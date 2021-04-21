@@ -2,7 +2,9 @@ LABEL_FONT = ("Verdana", 40, "bold")
 
 BACKGROUND_COLOR = "#faf8ef"
 
-GAME_COLOR = "#bbad9f"
+EMPTY_TILE_COLOR = "#cdc1b3"
+
+GAME_BACKGROUND_COLOR = "#bbad9f"
 
 EMPTY_COLOR = "#8eaba8"
 
