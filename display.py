@@ -40,5 +40,8 @@ class Game(Frame):
                 col_num += 1
                 row_num = 0
 
+        cell1 = Frame(game_background, bg="blue", width=tile_size, height=tile_size)
+        cell.grid(row=1, column=1, padx=pad_x_value, pady=pad_y_value)
+
 
 Game()
