@@ -1,6 +1,7 @@
 from tkinter import *
 import colors as c
 import random
+import game_functions
 
 border_edge = 10
 width = 700
@@ -8,19 +9,25 @@ height = 700
 
 
 class Game(Frame):
+    matrix = [[0] * 4 for x in range(4)]
+
     def __init__(self):
         Frame.__init__(self)
 
         self.grid()
         self.master.title('2048')
+
+        self.cells = []
+
         src_width = self.winfo_screenwidth()
         src_height = self.winfo_screenheight()
         x = (src_width / 2) - (width / 2)
         y = (src_height / 2) - (height / 2)
         self.master.geometry(f'{width}x{height}+{int(x)}+{int(y)}')
-        self.cells = []
+
         self.build_gui()
         self.draw_initial_squares()
+        self.update_gui()
 
         self.master.resizable(False, False)
         self.mainloop()
@@ -63,7 +70,6 @@ class Game(Frame):
             self.cells.append(row_insert)
 
     def draw_initial_squares(self):
-        matrix = [[0] * 4 for x in range(4)]
         for i in range(2):
             if random.random() < 0.9:
                 value = 2
@@ -72,11 +78,11 @@ class Game(Frame):
             row = random.randint(0, 3)
             col = random.randint(0, 3)
 
-            while matrix[row][col] != 0:
+            while self.matrix[row][col] != 0:
                 row = random.randint(0, 3)
                 col = random.randint(0, 3)
 
-            matrix[row][col] = value
+            self.matrix[row][col] = value
 
             self.cells[col][row]["frame"].configure(bg=c.TILE_COLORS[value])
             self.cells[col][row]["number"].configure(bg=c.TILE_COLORS[value],
@@ -84,8 +90,30 @@ class Game(Frame):
                                                      font=c.LABEL_FONT,
                                                      fg=c.LABEL_COLORS)
 
-        for elem in matrix:
-            print(elem)
+        my_list = []
+        for elem in self.matrix:
+            for i in range(3):
+                if elem[i] != 0 and elem[i + 1] == 0:
+                    elem[i + 1] = elem[i]
+                    elem[i] = 0
+
+            my_list.append(elem)
+        self.matrix = my_list
+
+    def update_gui(self):
+        for i in range(4):
+            for j in range(4):
+                if self.matrix[i][j] == 0:
+                    self.cells[j][i]["frame"].configure(bg=c.EMPTY_TILE_COLOR)
+                    self.cells[j][i]["number"].configure(bg=c.EMPTY_TILE_COLOR,
+                                                         text="")
+                else:
+                    self.cells[j][i]["frame"].configure(bg=c.TILE_COLORS[self.matrix[i][j]])
+                    self.cells[j][i]["number"].configure(bg=c.TILE_COLORS[self.matrix[i][j]],
+                                                         text=str(self.matrix[i][j]),
+                                                         font=c.LABEL_FONT,
+                                                         fg=c.LABEL_COLORS)
+        game_functions.get_matrix(self.matrix)
 
 
 Game()
