@@ -25,9 +25,14 @@ class Game(Frame):
         y = (src_height / 2) - (height / 2)
         self.master.geometry(f'{width}x{height}+{int(x)}+{int(y)}')
 
+        def right(event):
+            game_functions.right_stack(self.matrix)
+            self.update_gui()
+
+        self.master.bind("<Right>", right)
+
         self.build_gui()
         self.draw_initial_squares()
-        self.update_gui()
 
         self.master.resizable(False, False)
         self.mainloop()
@@ -36,6 +41,11 @@ class Game(Frame):
     def build_gui(self):
         background = Frame(self, bg=c.BACKGROUND_COLOR, width=width, height=height)
         background.pack()
+
+        # self.bind("<Left>", game_functions.right_stack(self.matrix))
+        # background.bind("<Right>", right)
+        # background.bind("<Up>", up)
+        # background.bind("<Down>", down)
 
         game_background = Frame(background, bg=c.GAME_BACKGROUND_COLOR)
         game_background.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.09)
@@ -89,16 +99,7 @@ class Game(Frame):
                                                      text=str(value),
                                                      font=c.LABEL_FONT,
                                                      fg=c.LABEL_COLORS)
-
-        my_list = []
-        for elem in self.matrix:
-            for i in range(3):
-                if elem[i] != 0 and elem[i + 1] == 0:
-                    elem[i + 1] = elem[i]
-                    elem[i] = 0
-
-            my_list.append(elem)
-        self.matrix = my_list
+        self.update_gui()
 
     def update_gui(self):
         for i in range(4):
@@ -113,7 +114,6 @@ class Game(Frame):
                                                          text=str(self.matrix[i][j]),
                                                          font=c.LABEL_FONT,
                                                          fg=c.LABEL_COLORS)
-        game_functions.get_matrix(self.matrix)
 
 
 Game()
