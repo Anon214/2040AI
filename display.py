@@ -25,11 +25,26 @@ class Game(Frame):
         y = (src_height / 2) - (height / 2)
         self.master.geometry(f'{width}x{height}+{int(x)}+{int(y)}')
 
+        def left(event):
+            game_functions.left_stack(self.matrix)
+            self.update_gui()
+
         def right(event):
             game_functions.right_stack(self.matrix)
             self.update_gui()
 
+        def up(event):
+            game_functions.up_stack(self.matrix)
+            self.update_gui()
+
+        def down(event):
+            game_functions.down_stack(self.matrix)
+            self.update_gui()
+
+        self.master.bind("<Left>", left)
         self.master.bind("<Right>", right)
+        self.master.bind("<Up>", up)
+        self.master.bind("<Down>", down)
 
         self.build_gui()
         self.draw_initial_squares()
